@@ -56,6 +56,8 @@ public abstract class AbstractLogHttpHandler extends AbstractHttpHandler {
       long fromTimeSecsParam, long toTimeSecsParam, boolean escape, String filterStr,
       @Nullable RunRecordDetail runRecord, String format, List<String> fieldsToSuppress) {
 
+    Exception dummyException = new Exception("Current stack trace for debugging");
+    LOG.error("Priyanshu AbstractLogHttpHandler doGetLogs", dummyException);
     try {
       TimeRange timeRange = parseTime(fromTimeSecsParam, toTimeSecsParam, responder);
       if (timeRange == null) {

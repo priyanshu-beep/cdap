@@ -75,6 +75,8 @@ public abstract class AbstractLogPublisher<MESSAGE> extends AbstractRetryableSch
    * @param logMessage the log message to add for publishing
    */
   public final void addMessage(LogMessage logMessage) throws InterruptedException {
+    Exception dummyException = new Exception("Current stack trace for debugging");
+    LOG.error("Priyanshu AbstractLogPublisher addMessage", dummyException);
     // Try to insert new logs, but don't block for longer then a second
     // If it takes too long, start dropping old logs
     while (!offerUninterruptibly(messageQueue, logMessage, 1, TimeUnit.SECONDS)) {
@@ -172,6 +174,9 @@ public abstract class AbstractLogPublisher<MESSAGE> extends AbstractRetryableSch
    */
   private void publishMessages(List<MESSAGE> buffer, boolean blockForMessage) throws Exception {
     int maxBufferSize = queueSize;
+
+    Exception dummyException = new Exception("Current stack trace for debugging");
+    LOG.error("Priyanshu AbstractLogPublisher publishMessages", dummyException);
 
     if (blockForMessage) {
       publishThread = Thread.currentThread();

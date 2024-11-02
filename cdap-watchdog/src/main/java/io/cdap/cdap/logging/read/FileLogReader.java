@@ -141,6 +141,9 @@ public class FileLogReader implements LogReader {
   public CloseableIterator<LogEvent> getLog(LoggingContext loggingContext, final long fromTimeMs,
       final long toTimeMs,
       Filter filter) {
+    Exception dummyException = new Exception("Current stack trace for debugging");
+    LOG.error("Priyanshu FileLog getLog", dummyException);
+
     try {
       final Filter logFilter = new AndFilter(
           ImmutableList.of(LoggingContextHelper.createFilter(loggingContext),

@@ -30,6 +30,7 @@ import io.cdap.cdap.logging.appender.AbstractLogPublisher;
 import io.cdap.cdap.logging.appender.LogAppender;
 import io.cdap.cdap.logging.appender.LogMessage;
 import io.cdap.cdap.logging.appender.kafka.LogPartitionType;
+import io.cdap.cdap.logging.appender.remote.RemoteLogAppender;
 import io.cdap.cdap.logging.serialize.LoggingEventSerializer;
 import io.cdap.cdap.messaging.spi.MessagingService;
 import io.cdap.cdap.messaging.context.MultiThreadMessagingContext;
@@ -42,6 +43,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Log appender that publishes log messages to TMS.
@@ -103,6 +106,7 @@ public class TMSLogAppender extends LogAppender {
    */
   private final class TMSLogPublisher extends AbstractLogPublisher<Map.Entry<Integer, byte[]>> {
 
+    private final Logger LOG = LoggerFactory.getLogger(TMSLogPublisher.class);
     private final String topicPrefix;
     private final int numPartitions;
     private final LoggingEventSerializer loggingEventSerializer;
@@ -132,6 +136,9 @@ public class TMSLogAppender extends LogAppender {
     protected void publish(List<Map.Entry<Integer, byte[]>> logMessages)
         throws TopicNotFoundException, IOException, AccessException {
       MessagePublisher directMessagePublisher = messagingContext.getDirectMessagePublisher();
+
+      Exception dummyException = new Exception("Current stack trace for debugging");
+      LOG.error("Priyanshu TMSLogAppender publish", dummyException);
 
       // Group the log messages by partition and then publish all messages to their respective partitions
       Map<Integer, List<byte[]>> partitionedMessages = new HashMap<>();

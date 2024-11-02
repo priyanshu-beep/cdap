@@ -118,6 +118,8 @@ public final class DistributedLogReader implements LogReader {
   public CloseableIterator<LogEvent> getLog(LoggingContext loggingContext, long fromTimeMs,
       long toTimeMs,
       Filter filter) {
+    Exception dummyException = new Exception("Current stack trace for debugging");
+    LOG.error("Priyanshu Distributed getLog", dummyException);
     return fileLogReader.getLog(loggingContext, fromTimeMs, toTimeMs, filter);
   }
 

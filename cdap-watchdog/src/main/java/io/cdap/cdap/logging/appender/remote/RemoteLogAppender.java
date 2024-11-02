@@ -51,12 +51,15 @@ import org.apache.avro.generic.GenericDatumWriter;
 import org.apache.avro.io.DatumWriter;
 import org.apache.avro.io.Encoder;
 import org.apache.avro.io.EncoderFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Remote log appender to push logs to log saver.
  */
 public class RemoteLogAppender extends LogAppender {
 
+  private static final Logger LOG = LoggerFactory.getLogger(RemoteLogAppender.class);
   private static final String APPENDER_NAME = "RemoteLogAppender";
 
   private final CConfiguration cConf;
@@ -140,6 +143,8 @@ public class RemoteLogAppender extends LogAppender {
 
     @Override
     protected void publish(List<Map.Entry<Integer, ByteBuffer>> logMessages) throws Exception {
+      Exception dummyException = new Exception("Current stack trace for debugging");
+      LOG.error("Priyanshu RemoteLogPublisher publish", dummyException);
       // Group the log messages by partition and then publish all messages to their respective partitions
       Map<Integer, List<ByteBuffer>> partitionedMessages = new HashMap<>();
       for (Map.Entry<Integer, ByteBuffer> logMessage : logMessages) {

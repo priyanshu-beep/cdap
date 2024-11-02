@@ -43,6 +43,7 @@ import io.cdap.cdap.logging.appender.LogMessage;
 import io.cdap.cdap.logging.framework.distributed.DistributedAppenderContext;
 import io.cdap.cdap.logging.guice.LogQueryRuntimeModule;
 import io.cdap.cdap.logging.logbuffer.LogBufferService;
+import io.cdap.cdap.logging.read.DistributedLogReader;
 import io.cdap.cdap.logging.read.FileLogReader;
 import io.cdap.cdap.logging.read.LogReader;
 import io.cdap.cdap.logging.service.LogQueryService;
@@ -60,6 +61,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 import org.apache.twill.zookeeper.ZKClientService;
 import org.slf4j.ILoggerFactory;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -154,8 +156,12 @@ public class LogsServiceMain extends AbstractServiceMain<EnvironmentOptions> {
    */
   private static final class SysOutLogAppender extends LogAppender {
 
+    private static final Logger LOG = LoggerFactory.getLogger(DistributedLogReader.class);
+
     @Override
     protected void appendEvent(LogMessage logMessage) {
+      Exception dummyException = new Exception("Current stack trace for debugging");
+      LOG.error("Priyanshu LogsServiceMain appendEvent", dummyException);
       ILoggerFactory loggerFactory = LoggerFactory.getILoggerFactory();
       if (loggerFactory instanceof LoggerContext) {
         ch.qos.logback.classic.Logger logger = ((LoggerContext) loggerFactory).getLogger(
